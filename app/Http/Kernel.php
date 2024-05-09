@@ -43,6 +43,10 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+        'custom' => [
+            'CheckRole', // Add your middleware key here
+            // Add other middleware if needed
+        ],
     ];
 
     /**
@@ -63,5 +67,8 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'CheckRole' => \App\Http\Middleware\CheckRole::class,
+
+
     ];
 }

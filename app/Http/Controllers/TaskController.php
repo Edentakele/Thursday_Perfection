@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 use App\Models\Task;
+use App\Models\User;
+use Illuminate\Support\Facades\Route;
+
+use Illuminate\Support\Facades\Auth;
+
 
 use Illuminate\Http\Request;
 
@@ -9,8 +14,22 @@ class TaskController extends Controller
 {
     public function index()
     {
+        // $user = Auth::user();
+        // $tasks = $user->tasks()->get();
+        // $tasks = Task::all();
+        // return view('tasks.index', compact('tasks'));
+        $user = Auth::user();
+
+    // Assuming 'role' is the attribute that determines if a user is admin or not
+    if ($user->role === 'admin') {
         $tasks = Task::all();
+        return view('tasks.admin', compact('tasks'));
+
+    } else {
+        $tasks = $user->tasks;
         return view('tasks.index', compact('tasks'));
+    }
+
     }
 
     public function create()
@@ -23,7 +42,7 @@ class TaskController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:255',
         ]);
-
+        $validatedData['user_id'] = Auth::id();
         Task::create($validatedData);
 
         return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
