@@ -38,13 +38,6 @@ Route::middleware('auth')->group(function () {
     Route::post('password/update', [PasswordController::class, 'update'])->name('password.update');
     Route::resource('tasks', TaskController::class);
     Route::resource('users', UserController::class);
-
-    // Route::match(['put', 'post'], '/password/update', [PasswordController::class, 'update'])->name('password.update');
-
-    // Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
-
-    // Define route for displaying the profile edit form
-
 });
 
 require __DIR__ . '/auth.php';

@@ -58,7 +58,7 @@
     </form>
 
     <!-- Delete User Form -->
-    {{-- <form method="POST" action="{{ route('profile.destroy') }}">
+    <form method="POST" action="{{ route('profile.destroy') }}">
         @csrf
         @method('DELETE')
 
@@ -67,7 +67,7 @@
         <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">
             Delete Account
         </button>
-    </form> --}}
+    </form>
 
     <!-- Back to Tasks Button -->
 

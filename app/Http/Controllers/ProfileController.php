@@ -46,23 +46,11 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validate([
-            'password' => ['required'],
-        ]);
-
         $user = $request->user();
-
-        // Check if the provided password matches the authenticated user's password
-        if (!Hash::check($request->input('password'), $user->password)) {
-            return redirect()->back()->withErrors(['password' => 'The password is incorrect.'])->withInput();
-        }
-
         Auth::logout();
         $user->delete();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect()->to('/')->with('status', 'Your account has been deleted successfully.');
     }
 
