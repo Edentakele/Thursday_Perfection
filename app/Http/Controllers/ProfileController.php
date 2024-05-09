@@ -26,15 +26,17 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
-        $request->user()->fill($request->validated());
+        $user = $request->user();
+        $user->update($request->validated());
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
+        // If email is changed, unset email_verified_at to force re-verification
+        if ($user->isDirty('email')) {
+            $user->email_verified_at = null;
+            $user->save();
+            return redirect()->route('verification.notice')->with('status', 'Please verify your email.');
         }
 
-        $request->user()->save();
-
-        return Redirect::route('profile.edit')->with('status', 'profile-updated');
+        return redirect()->route('tasks.index')->with('status', 'Profile updated successfully.');
     }
 
     /**
@@ -42,19 +44,18 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        $request->validateWithBag('userDeletion', [
-            'password' => ['required', 'current-password'],
+        $request->validate([
+            'password' => ['required', 'password'],
         ]);
 
         $user = $request->user();
 
         Auth::logout();
-
         $user->delete();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return redirect()->to('/')->with('status', 'Your account has been deleted successfully.');
     }
 }
