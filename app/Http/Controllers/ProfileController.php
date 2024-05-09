@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Hash;
+
 
 class ProfileController extends Controller
 {
@@ -45,10 +47,15 @@ class ProfileController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([
-            'password' => ['required', 'password'],
+            'password' => ['required'],
         ]);
 
         $user = $request->user();
+
+        // Check if the provided password matches the authenticated user's password
+        if (!Hash::check($request->input('password'), $user->password)) {
+            return redirect()->back()->withErrors(['password' => 'The password is incorrect.'])->withInput();
+        }
 
         Auth::logout();
         $user->delete();
@@ -58,4 +65,6 @@ class ProfileController extends Controller
 
         return redirect()->to('/')->with('status', 'Your account has been deleted successfully.');
     }
+
+
 }

@@ -14,7 +14,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        // Retrieve users excluding those with the role "admin"
+        $users = User::where('role', '!=', 'admin')->get();
+
         return view('users.index', compact('users'));
     }
 
