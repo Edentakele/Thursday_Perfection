@@ -45,8 +45,16 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if the user is an admin
+        if ($user->role === 'admin') {
+            return view('tasks.form', compact('task'));
+        }
+
         // Ensure that the authenticated user owns the task
-        if ($task->user_id !== Auth::id()) {
+        if ($task->user_id !== $user->id) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -55,8 +63,22 @@ class TaskController extends Controller
 
     public function update(Request $request, Task $task)
     {
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Check if the user is an admin
+        if ($user->role === 'admin') {
+            $validatedData = $request->validate([
+                'title' => 'required|max:255',
+            ]);
+
+            $task->update($validatedData);
+
+            return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
+        }
+
         // Ensure that the authenticated user owns the task
-        if ($task->user_id !== Auth::id()) {
+        if ($task->user_id !== $user->id) {
             abort(403, 'Unauthorized action.');
         }
 
@@ -68,11 +90,12 @@ class TaskController extends Controller
 
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully.');
     }
+
     public function destroy(Task $task)
     {
         $task->delete();
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully.');
     }
-    
+
 
 }
