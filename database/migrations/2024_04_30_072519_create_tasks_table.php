@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->default(null);;
+            // $table->unsignedBigInteger('user_id')->default(null);
             $table->timestamps();
         });
     }

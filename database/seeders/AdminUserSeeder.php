@@ -19,15 +19,15 @@ class AdminUserSeeder extends Seeder
         // Create two admin users with admin role
         User::create([
             'name' => 'Admin User 1',
-            'email' => 'admin1@example.com',
-            'password' => Hash::make('password'), // You can use bcrypt() as well
+            'email' => 'admin1@admin.com',
+            'password' => Hash::make('password1'), // You can use bcrypt() as well
             'role' => 'admin',
         ]);
 
         User::create([
             'name' => 'Admin User 2',
-            'email' => 'admin2@example.com',
-            'password' => Hash::make('password'),
+            'email' => 'admin2@admin.com',
+            'password' => Hash::make('password2'),
             'role' => 'admin',
         ]);
     }
