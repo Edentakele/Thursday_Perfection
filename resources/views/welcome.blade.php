@@ -10,7 +10,7 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background-color: #f3f4f6;
+            background-color: aqua;
             color: #333;
             margin: 0;
             padding: 0;
